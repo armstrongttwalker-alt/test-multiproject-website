@@ -177,7 +177,7 @@ ogp_custom_meta_tags = (
 ogp_enable_meta_description = True
 ogp_description_length = 300
 
-templates_path = ["_templates"]
+# templates_path = ["_templates"]
 html_baseurl = os.environ.get("READTHEDOCS_CANONICAL_URL", "/")
 
 master_doc = "index"
@@ -327,6 +327,8 @@ else:
         main_site_url = "https://docs.flagos.io/zh/latest/"
         main_site_text = "返回 FlagOS 文档"
 
+    templates_path = ["_templates"]
+
     # Sphinx Book Theme configuration for all other projects
     html_theme_options = {
         "logo": {
@@ -338,7 +340,7 @@ else:
         "repository_url": "https://github.com/flagos-ai/website",
         "use_edit_page_button": True,
         "use_repository_button": True,
-        "navbar_start": ["back_to_main.html"],
+        "navbar_end": ["back_to_main.html"],
         }
 
     html_context = {
