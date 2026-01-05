@@ -1,2 +1,102 @@
 <!-- docs/_templates/return_to_main.html -->
-<button>My test button</button>
+<style>
+  .return-to-main-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    padding: 8px 16px;
+    margin-left: 12px;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+    text-decoration: none;
+    border-radius: 8px;
+    font-weight: 600;
+    font-size: 0.9rem;
+    border: none;
+    cursor: pointer;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    position: relative;
+    overflow: hidden;
+    white-space: nowrap;
+  }
+  
+  .return-to-main-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+    background: linear-gradient(135deg, #5a67d8 0%, #6b46c1 100%);
+    text-decoration: none;
+    color: white;
+  }
+  
+  .return-to-main-btn:active {
+    transform: translateY(0);
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  }
+  
+  .return-to-main-btn::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+    transition: left 0.6s ease;
+  }
+  
+  .return-to-main-btn:hover::before {
+    left: 100%;
+  }
+  
+  .return-to-main-btn i {
+    font-size: 0.9em;
+    transition: transform 0.3s ease;
+  }
+  
+  .return-to-main-btn:hover i {
+    transform: translateX(-3px);
+  }
+  
+  /* respond */
+  @media (max-width: 768px) {
+    .return-to-main-btn {
+      margin-left: 8px;
+      padding: 6px 12px;
+      font-size: 0.85rem;
+    }
+    
+    .return-to-main-btn span {
+      display: none;
+    }
+    
+    .return-to-main-btn i {
+      font-size: 1.1em;
+      margin: 0;
+    }
+  }
+</style>
+
+<a href="{{ main_site_url }}" 
+   class="return-to-main-btn"
+   aria-label="{{ main_site_text }}"
+   title="{{ main_site_text }}">
+  <i class="fas fa-arrow-left"></i>
+  <span>{{ main_site_text }}</span>
+</a>
+
+<!-- Font Awesome  -->
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+  // Check Font Awesome
+  if (!document.querySelector('link[href*="font-awesome"]')) {
+    var link = document.createElement('link');
+    link.rel = 'stylesheet';
+    link.href = 'https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css';
+    link.integrity = 'sha512-iecdLmaskl7CVkqkXNQ/ZH/XLlvWZOJyj7Yy7tcenmpD1ypASozpmT/E0iPtmFIB46ZmdtAc9eNBvH0H/ZpiBw==';
+    link.crossOrigin = 'anonymous';
+    document.head.appendChild(link);
+  }
+});
+</script>
