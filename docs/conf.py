@@ -338,13 +338,7 @@ else:
         "repository_url": "https://github.com/flagos-ai/website",
         "use_edit_page_button": True,
         "use_repository_button": True,
-        "navbar_end": [
-            {
-                "type": "link",
-                "text": main_site_text,
-                "url": main_site_url,
-            }
-        ],
+        "extra_navbar": f'<a href="{main_site_url}">{main_site_text}</a>',
         }
 
     # No html_sidebars for Sphinx Book Theme
