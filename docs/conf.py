@@ -332,8 +332,8 @@ else:
     # Sphinx Book Theme configuration for all other projects
     html_theme_options = {
         "logo": {
-            "image_light": "img/light-logo.svg",
-            "image_dark": "img/dark-logo.svg",
+            "image_light": "_static/dark-logo.svg",
+            "image_dark": "_static/light-logo.svg",
         },
         "home_page_in_toc": True,
         "use_download_button": False,
