@@ -302,6 +302,24 @@ if html_theme == "pydata_sphinx_theme":
 
 else:
     # Sphinx Book Theme configuration for all other projects
+    # repo URL per project
+    repository_urls = {
+        "flagcx_en": "https://github.com/flagos-ai/FlagCX",
+        "flagcx_zh": "https://github.com/flagos-ai/FlagCX",
+        "flaggems_en": "https://github.com/flagos-ai/FlagGems",
+        "flaggems_zh": "https://github.com/flagos-ai/FlagGems",
+        "flagtree_en": "https://github.com/flagos-ai/FlagTree",
+        "flagtree_zh": "https://github.com/flagos-ai/FlagTree",
+        "flagrelease_en": "https://github.com/flagos-ai/FlagRelease",
+        "flagrelease_zh": "https://github.com/flagos-ai/FlagRelease",
+        "flagperf_en": "https://github.com/flagos-ai/FlagPerf",
+        "flagperf_zh": "https://github.com/flagos-ai/FlagPerf",
+    }
+    
+    # Obtain the current repo URL, if failed, set the default value
+    current_repo_url = repository_urls.get(docset, "https://github.com/flagos-ai")
+
+    # Sphinx Book Theme configuration for all other projects
     html_theme_options = {
         "logo": {
             "image_light": "img/logo.png",
@@ -309,7 +327,7 @@ else:
         },
         "home_page_in_toc": True,
         "use_download_button": False,
-        "repository_url": "https://github.com/flagos-ai/KernelGen",
+        "repository_url": current_repo_url,
         "use_edit_page_button": True,
         "use_repository_button": True,
     }
