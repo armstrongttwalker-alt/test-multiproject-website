@@ -1,62 +1,65 @@
 <!-- docs/_templates/return_to_main.html -->
-<!-- 简洁版本 - 无图标 -->
+<!-- 极简文字链接版本 -->
 <style>
-  .return-to-main-btn-simple {
+  .return-to-main-link {
     display: inline-block;
-    padding: 8px 16px;
-    margin-left: 12px;
-    background-color: #f0f4f8;
-    color: #2d3748;
+    margin-left: 16px;
+    color: #4a5568;
     text-decoration: none;
-    border-radius: 6px;
     font-weight: 500;
-    font-size: 0.9rem;
-    border: 2px solid #e2e8f0;
-    transition: all 0.2s ease;
-    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
-    white-space: nowrap;
+    font-size: 0.95rem;
+    position: relative;
+    padding: 4px 0;
+    transition: color 0.2s ease;
   }
   
-  .return-to-main-btn-simple:hover {
-    background-color: #4299e1;
-    color: white;
-    border-color: #4299e1;
+  .return-to-main-link:hover {
+    color: #2b6cb0;
     text-decoration: none;
-    box-shadow: 0 2px 5px rgba(66, 153, 225, 0.3);
   }
   
-  .return-to-main-btn-simple:focus {
-    outline: none;
-    box-shadow: 0 0 0 3px rgba(66, 153, 225, 0.3);
+  .return-to-main-link::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 0;
+    height: 2px;
+    background-color: #2b6cb0;
+    transition: width 0.3s ease;
+  }
+  
+  .return-to-main-link:hover::after {
+    width: 100%;
   }
   
   /* 深色模式支持 */
   @media (prefers-color-scheme: dark) {
-    .return-to-main-btn-simple {
-      background-color: #2d3748;
-      color: #e2e8f0;
-      border-color: #4a5568;
+    .return-to-main-link {
+      color: #cbd5e0;
     }
     
-    .return-to-main-btn-simple:hover {
-      background-color: #4299e1;
-      border-color: #4299e1;
+    .return-to-main-link:hover {
+      color: #90cdf4;
+    }
+    
+    .return-to-main-link::after {
+      background-color: #90cdf4;
     }
   }
   
   /* 响应式调整 */
   @media (max-width: 768px) {
-    .return-to-main-btn-simple {
-      margin-left: 8px;
-      padding: 6px 12px;
-      font-size: 0.85rem;
+    .return-to-main-link {
+      margin-left: 12px;
+      font-size: 0.9rem;
     }
   }
 </style>
 
 <a href="{{ main_site_url }}" 
-   class="return-to-main-btn-simple"
+   class="return-to-main-link"
    aria-label="{{ main_site_text }}"
    title="{{ main_site_text }}">
-  {{ main_site_text }}
+  ← {{ main_site_text }}
 </a>
