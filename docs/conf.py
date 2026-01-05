@@ -340,7 +340,7 @@ else:
         "repository_url": "https://github.com/flagos-ai/website",
         "use_edit_page_button": True,
         "use_repository_button": True,
-        "navbar_end": ["back_to_main.html"],
+        "navbar_center": ["back_to_main.html"],
         }
 
     html_context = {
