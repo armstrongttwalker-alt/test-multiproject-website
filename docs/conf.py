@@ -341,6 +341,7 @@ else:
         "use_edit_page_button": True,
         "use_repository_button": True,
         "navbar_center": ["back_to_main.html"],
+        "default_mode": "light",
         }
 
     html_context = {
