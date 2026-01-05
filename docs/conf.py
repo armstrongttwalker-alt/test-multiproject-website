@@ -339,20 +339,13 @@ else:
         "use_edit_page_button": True,
         "use_repository_button": True,
     }
+
+    "extra_footer": f'<a href="{main_site_url}">Back to Main Site</a>',
+
     # No html_sidebars for Sphinx Book Theme
     html_sidebars = {}
     # No html_context for Sphinx Book Theme
     html_last_updated_fmt = '%b %d, %Y %H:%M'
-
-if docset.endswith("_en"):
-        main_site_url = "https:dos.flagos.io/en/latest/"
-    else:
-        main_site_url = "https:dos.flagos.io/zh/latest/"
-
-    html_theme_options = {
-        # ... 其他配置 ...
-        "extra_footer": f'<a href="{main_site_url}">Back to Main Site</a>',
-    }
 
 rst_epilog = """
 .. |org_brand| replace:: KernelGen Community
