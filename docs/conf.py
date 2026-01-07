@@ -256,7 +256,7 @@ html_short_title = ""
 
 # Only flagos_en and flagos_zh use pydata_sphinx_theme, all others use sphinx_book_theme
 if docset in ["flagos_en", "flagos_zh"]:
-    html_theme = "sphinx_rtd_theme"
+    html_theme = "pydata_sphinx_theme"
 else:
     html_theme = "sphinx_book_theme"
 
@@ -269,7 +269,7 @@ html_logo = "img/logo.png"
 html_favicon = "img/logo.png"
 
 # Theme-specific configurations
-if html_theme == "sphinx_rtd_theme":
+if html_theme == "pydata_sphinx_theme":
     # PyData Sphinx Theme configuration for flagos_en and flagos_zh
     html_theme_options = {
         "logo": {
