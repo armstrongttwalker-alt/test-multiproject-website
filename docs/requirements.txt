@@ -1,5 +1,6 @@
 myst-parser
 sphinx-multiproject==1.0.0
+readthedocs-sphinx-search
 pydata-sphinx-theme
 sphinx-rtd-theme
 sphinx-book-theme~=1.1
