@@ -256,20 +256,20 @@ html_short_title = ""
 
 # Only flagos_en and flagos_zh use pydata_sphinx_theme, all others use sphinx_book_theme
 if docset in ["flagos_en", "flagos_zh"]:
-    html_theme = "sphinx_book_theme"
+    html_theme = "pydata_sphinx_theme"
 else:
     html_theme = "sphinx_book_theme"
 
 # Common static paths
 html_static_path = ["_static", f"{docset}/_static"]
 html_css_files = ["custom.css", "homepage.css"]
-html_js_files = ['js/custom.js']
+html_js_files = []
 
 html_logo = "img/logo.png"
 html_favicon = "img/logo.png"
 
 # Theme-specific configurations
-if html_theme == "sphinx_book_theme":
+if html_theme == "pydata_sphinx_theme":
     # PyData Sphinx Theme configuration for flagos_en and flagos_zh
     html_theme_options = {
         "logo": {
@@ -347,7 +347,6 @@ else:
     html_context = {
         "main_site_url": main_site_url,
         "main_site_text": main_site_text,
-        "default_mode": "light",
     }
 
     # No html_sidebars for Sphinx Book Theme
