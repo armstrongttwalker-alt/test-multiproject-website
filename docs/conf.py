@@ -45,7 +45,6 @@ sys.path.append(os.path.abspath("_ext"))
 
 # Base extensions - only include actually installed ones
 extensions = [
-    'sphinx_search.extension',
     "multiproject",  # Sphinx extension name, not Python module name
     "myst_parser",
     "sphinx_copybutton",
@@ -264,7 +263,7 @@ else:
 # Common static paths
 html_static_path = ["_static", f"{docset}/_static"]
 html_css_files = ["custom.css", "homepage.css"]
-html_js_files = []
+html_js_files = ['js/custom.js']
 
 html_logo = "img/logo.png"
 html_favicon = "img/logo.png"
