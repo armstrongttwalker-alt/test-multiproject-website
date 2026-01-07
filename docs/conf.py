@@ -263,7 +263,7 @@ else:
 # Common static paths
 html_static_path = ["_static", f"{docset}/_static"]
 html_css_files = ["custom.css", "homepage.css"]
-html_js_files = ['custom-search-override.js']
+html_js_files = ['custom-search.js']
 
 html_logo = "img/logo.png"
 html_favicon = "img/logo.png"
