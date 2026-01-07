@@ -1,10 +1,10 @@
-// search-button-integrated.js
-// Single file solution: customizes button appearance AND ensures click triggers SSS search
+// search-button-enhanced.js
+// Enhanced version with kbd styling for the slash key
 
 (function() {
     'use strict';
     
-    console.log('Integrated search button solution loading...');
+    console.log('Enhanced search button solution loading...');
     
     let isInitialized = false;
     let clickHandler = null;
@@ -24,7 +24,7 @@
         console.log('Found search button, initializing...');
         
         // Part 1: Customize button appearance (if not already done)
-        if (!searchButton.getAttribute('data-customized')) {
+        if (!searchButton.getAttribute('data-enhanced')) {
             customizeAppearance(searchButton);
         }
         
@@ -32,12 +32,12 @@
         ensureClickBehavior(searchButton);
         
         isInitialized = true;
-        console.log('✅ Search button fully initialized');
+        console.log('✅ Search button fully initialized with enhanced styling');
     }
     
     // Customize button text from "Search Ctrl+K" to "Type / to search"
     function customizeAppearance(button) {
-        console.log('Customizing button appearance...');
+        console.log('Customizing button appearance with kbd element...');
         
         // Hide original text elements
         const defaultText = button.querySelector('.search-button__default-text');
@@ -51,13 +51,24 @@
             kbdShortcut.style.display = 'none';
         }
         
-        // Add new text
-        const newText = document.createElement('span');
-        newText.className = 'search-button__custom-text';
-        newText.textContent = 'Type / to search';
-        newText.style.cssText = 'margin-left:8px;font-size:0.9em;font-weight:500;';
+        // Create enhanced text with kbd element for the slash key
+        const textContainer = document.createElement('span');
+        textContainer.className = 'search-button__custom-text';
         
-        button.appendChild(newText);
+        // Create text nodes and kbd element
+        const textBefore = document.createTextNode('Type ');
+        const kbdElement = document.createElement('kbd');
+        kbdElement.className = 'search-button__kbd';
+        kbdElement.textContent = '/';
+        const textAfter = document.createTextNode(' to search');
+        
+        // Assemble the text
+        textContainer.appendChild(textBefore);
+        textContainer.appendChild(kbdElement);
+        textContainer.appendChild(textAfter);
+        
+        // Add to button
+        button.appendChild(textContainer);
         
         // Update tooltip
         if (button.hasAttribute('data-bs-original-title')) {
@@ -66,7 +77,14 @@
             button.setAttribute('title', 'Type / to search');
         }
         
-        button.setAttribute('data-customized', 'true');
+        // Update aria-label for better accessibility
+        try {
+            button.setAttribute('aria-label', 'Type slash to search');
+        } catch (e) {
+            // Ignore if we can't set it
+        }
+        
+        button.setAttribute('data-enhanced', 'true');
     }
     
     // Ensure button click triggers SSS search
@@ -92,25 +110,6 @@
         
         // Add event listener with capture phase to ensure we get it first
         button.addEventListener('click', clickHandler, true);
-        
-        // Also try to remove any other click handlers (by cloning the button)
-        try {
-            // Clone button to remove existing event listeners
-            const newButton = button.cloneNode(true);
-            button.parentNode.replaceChild(newButton, button);
-            
-            // Re-apply our click handler to the new button
-            newButton.addEventListener('click', clickHandler, true);
-            
-            // Re-apply customization if needed
-            if (!newButton.getAttribute('data-customized')) {
-                customizeAppearance(newButton);
-            }
-            
-            console.log('Button replaced to ensure clean event handling');
-        } catch (e) {
-            console.log('Could not clone button, using direct event handler');
-        }
     }
     
     // Function to trigger Read the Docs SSS search
@@ -134,80 +133,156 @@
             
             console.log('✅ / key event dispatched');
             
-            // Also try to trigger keyup event for completeness
-            setTimeout(() => {
-                const keyUpEvent = new KeyboardEvent('keyup', {
-                    key: '/',
-                    bubbles: true
-                });
-                document.dispatchEvent(keyUpEvent);
-            }, 50);
-            
         } catch (error) {
             console.error('Failed to trigger SSS search:', error);
             
-            // Fallback: try to find and focus the SSS search input
+            // Fallback
             setTimeout(() => {
-                const sssInput = document.querySelector('.search-query, [type="search"]');
-                if (sssInput) {
-                    sssInput.focus();
-                    console.log('Focused existing search input');
-                } else {
-                    // Final fallback: redirect to search page
-                    window.location.href = '/search/';
-                }
+                window.location.href = '/search/';
             }, 100);
         }
     }
     
-    // Add minimal CSS styles
-    function addStyles() {
+    // Add enhanced CSS styles with kbd styling
+    function addEnhancedStyles() {
         const style = document.createElement('style');
-        style.id = 'search-button-styles';
+        style.id = 'search-button-enhanced-styles';
         style.textContent = `
+            /* Base button styling */
             .search-button-field {
-                min-width: 160px !important;
+                min-width: 180px !important;
                 justify-content: flex-start !important;
+                padding-left: 12px !important;
+                padding-right: 12px !important;
             }
             
+            /* Hover effect */
             .search-button-field:hover {
                 cursor: pointer;
                 transform: translateY(-1px);
                 transition: transform 0.2s;
             }
             
+            /* Custom text container */
             .search-button__custom-text {
                 font-size: 0.9em !important;
                 font-weight: 500 !important;
+                display: flex;
+                align-items: center;
+                gap: 4px;
             }
             
+            /* Kbd element styling - similar to the example */
+            .search-button__kbd {
+                display: inline-flex;
+                align-items: center;
+                justify-content: center;
+                min-width: 20px;
+                height: 20px;
+                padding: 0 4px;
+                font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+                font-size: 12px;
+                font-weight: 600;
+                line-height: 1;
+                color: #1f2328;
+                background-color: #f6f8fa;
+                border: 1px solid #d0d7de;
+                border-radius: 4px;
+                box-shadow: 0 1px 0 rgba(31, 35, 40, 0.04);
+                margin: 0 2px;
+            }
+            
+            /* Dark mode support */
+            @media (prefers-color-scheme: dark) {
+                .search-button__kbd {
+                    color: #e6edf3;
+                    background-color: #30363d;
+                    border-color: #6e7681;
+                    box-shadow: 0 1px 0 rgba(110, 118, 129, 0.2);
+                }
+            }
+            
+            /* More compact kbd for small screens */
             @media (max-width: 768px) {
-                .search-button-field {
-                    min-width: 140px !important;
+                .search-button__kbd {
+                    min-width: 18px;
+                    height: 18px;
+                    font-size: 11px;
                 }
                 
                 .search-button__custom-text {
                     font-size: 0.85em !important;
                 }
             }
+            
+            /* Animation for the kbd on hover */
+            .search-button-field:hover .search-button__kbd {
+                transform: translateY(-1px);
+                box-shadow: 0 2px 0 rgba(31, 35, 40, 0.08);
+                transition: all 0.1s ease;
+            }
         `;
         
-        if (!document.getElementById('search-button-styles')) {
+        if (!document.getElementById('search-button-enhanced-styles')) {
             document.head.appendChild(style);
         }
     }
     
+    // Alternative: More prominent kbd styling
+    function addAlternativeStyles() {
+        const style = document.createElement('style');
+        style.id = 'search-button-alternative-styles';
+        style.textContent = `
+            /* Alternative kbd styling - more like GitHub's style */
+            .search-button__kbd {
+                display: inline-flex;
+                align-items: center;
+                justify-content: center;
+                min-width: 22px;
+                height: 22px;
+                padding: 0 6px;
+                font-family: ui-monospace, SFMono-Regular, SF Mono, Menlo, Consolas, Liberation Mono, monospace;
+                font-size: 13px;
+                font-weight: 700;
+                line-height: 1;
+                color: #24292f;
+                background: linear-gradient(180deg, #f6f8fa 0%, #ebedf0 100%);
+                border: 1px solid #d1d9e0;
+                border-bottom-color: #c0c8d1;
+                border-radius: 6px;
+                box-shadow: inset 0 -1px 0 #c0c8d1, 0 1px 1px rgba(31, 35, 40, 0.04);
+                margin: 0 3px;
+            }
+            
+            /* Dark mode for alternative style */
+            @media (prefers-color-scheme: dark) {
+                .search-button__kbd {
+                    color: #f0f6fc;
+                    background: linear-gradient(180deg, #30363d 0%, #262b32 100%);
+                    border: 1px solid #6e7681;
+                    border-bottom-color: #484f58;
+                    box-shadow: inset 0 -1px 0 #484f58, 0 1px 1px rgba(110, 118, 129, 0.2);
+                }
+            }
+        `;
+        
+        // Uncomment the line below to use the alternative style
+        // document.head.appendChild(style);
+    }
+    
     // Initialize everything
     function init() {
-        console.log('Initializing integrated search button solution...');
+        console.log('Initializing enhanced search button solution...');
         
-        // Add styles first
-        addStyles();
+        // Add styles
+        addEnhancedStyles();
+        // Uncomment the line below to try the alternative style
+        // addAlternativeStyles();
         
         // Try to initialize immediately
         initializeSearchButton();
         
-        // Also set up a MutationObserver for dynamic content
+        // Set up a MutationObserver for dynamic content
         const observer = new MutationObserver(function(mutations) {
             const searchButton = document.querySelector('.search-button-field.search-button__button');
             if (searchButton && !isInitialized) {
@@ -218,7 +293,7 @@
         
         observer.observe(document.body, { childList: true, subtree: true });
         
-        // Set timeout to ensure initialization even if observer misses it
+        // Set timeout to ensure initialization
         setTimeout(() => {
             if (!isInitialized) {
                 console.log('Timeout: forcing initialization...');
@@ -231,27 +306,26 @@
     if (document.readyState === 'loading') {
         document.addEventListener('DOMContentLoaded', init);
     } else {
-        // Use setTimeout to avoid blocking
         setTimeout(init, 100);
     }
     
-    // Debug function for testing
+    // Debug function
     window.debugSearchButton = function() {
-        console.group('🔍 Search Button Debug Info');
+        console.group('🔍 Enhanced Search Button Debug Info');
         
         const button = document.querySelector('.search-button-field.search-button__button');
         console.log('Button exists:', !!button);
         
         if (button) {
             console.log('Button HTML:', button.outerHTML);
-            console.log('Is customized:', button.getAttribute('data-customized'));
-            console.log('Event listeners:', 
-                typeof getEventListeners === 'function' ? 
-                getEventListeners(button) : 'Use Chrome DevTools');
+            console.log('Is enhanced:', button.getAttribute('data-enhanced'));
             
-            // Test click programmatically
-            console.log('Testing click...');
-            button.click();
+            // Check if kbd element exists
+            const kbdElement = button.querySelector('.search-button__kbd');
+            console.log('KBD element found:', !!kbdElement);
+            if (kbdElement) {
+                console.log('KBD element:', kbdElement.outerHTML);
+            }
         }
         
         console.groupEnd();
