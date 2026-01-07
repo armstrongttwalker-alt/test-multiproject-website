@@ -1,10 +1,10 @@
-// search-button-spacing.js
-// Only adjust spacing between search icon and "Type" text
+// search-button-dark-mode.js
+// Fix text visibility on dark mode hover
 
 (function() {
     'use strict';
     
-    console.log('Search button spacing adjustment loading...');
+    console.log('Dark mode hover fix loading...');
     
     let isInitialized = false;
     let clickHandler = null;
@@ -19,21 +19,17 @@
             return;
         }
         
-        console.log('Found search button, initializing spacing...');
-        
-        if (!searchButton.getAttribute('data-spacing-adjusted')) {
-            customizeSpacing(searchButton);
+        if (!searchButton.getAttribute('data-dark-mode-fixed')) {
+            customizeButton(searchButton);
         }
         
         ensureClickBehavior(searchButton);
         
         isInitialized = true;
-        console.log('✅ Search button spacing adjusted');
+        console.log('✅ Dark mode hover fix applied');
     }
     
-    function customizeSpacing(button) {
-        console.log('Adjusting spacing between icon and text...');
-        
+    function customizeButton(button) {
         // Hide original text elements
         const defaultText = button.querySelector('.search-button__default-text');
         const kbdShortcut = button.querySelector('.search-button__kbd-shortcut');
@@ -66,7 +62,7 @@
             button.setAttribute('data-bs-original-title', 'Type / to search');
         }
         
-        button.setAttribute('data-spacing-adjusted', 'true');
+        button.setAttribute('data-dark-mode-fixed', 'true');
     }
     
     function ensureClickBehavior(button) {
@@ -108,17 +104,17 @@
         }
     }
     
-    // Only adjust spacing here, nothing else
-    function addSpacingStyles() {
+    // Fix dark mode hover visibility
+    function addDarkModeFix() {
         const style = document.createElement('style');
-        style.id = 'search-button-spacing-styles';
+        style.id = 'search-button-dark-mode-fix';
         style.textContent = `
-            /* ONLY adjust spacing: increase margin between search icon and text */
+            /* Increase spacing between icon and text */
             .search-button-field .svg-inline--fa {
-                margin-right: 16px !important; /* Increased from original 8px */
+                margin-right: 16px !important;
             }
             
-            /* Keep existing styles for kbd element */
+            /* Original kbd styling */
             .search-button__kbd {
                 display: inline-flex;
                 align-items: center;
@@ -138,6 +134,7 @@
                 margin: 0 2px;
             }
             
+            /* Dark mode support */
             @media (prefers-color-scheme: dark) {
                 .search-button__kbd {
                     color: #e6edf3;
@@ -146,18 +143,85 @@
                     box-shadow: 0 1px 0 rgba(110, 118, 129, 0.2);
                 }
             }
+            
+            /* FIX: Ensure text remains visible on hover in dark mode */
+            .search-button-field:hover {
+                /* Keep existing hover effects but ensure text contrast */
+            }
+            
+            /* Explicitly set text color for dark mode hover */
+            @media (prefers-color-scheme: dark) {
+                .search-button-field:hover {
+                    /* Force text color to ensure visibility */
+                    color: rgba(255, 255, 255, 0.9) !important;
+                }
+                
+                .search-button-field:hover .search-button__custom-text {
+                    color: rgba(255, 255, 255, 0.9) !important;
+                }
+                
+                .search-button-field:hover .search-button__kbd {
+                    /* Keep kbd styling but make sure it contrasts with hover background */
+                    background-color: #40464d !important;
+                    border-color: #7a828b !important;
+                    color: #f0f6fc !important;
+                }
+            }
+            
+            /* Additional fix for all themes - ensure text contrast */
+            .search-button-field:hover .search-button__custom-text {
+                opacity: 1 !important;
+            }
+            
+            .search-button-field:hover .search-button__kbd {
+                opacity: 1 !important;
+            }
         `;
         
-        if (!document.getElementById('search-button-spacing-styles')) {
+        if (!document.getElementById('search-button-dark-mode-fix')) {
             document.head.appendChild(style);
         }
     }
     
-    function init() {
-        console.log('Initializing spacing adjustment...');
+    // Alternative: Force specific colors for dark mode hover
+    function addForceDarkModeColors() {
+        const forceStyle = document.createElement('style');
+        forceStyle.id = 'search-button-force-dark-colors';
+        forceStyle.textContent = `
+            /* Force specific colors for dark mode hover to ensure visibility */
+            @media (prefers-color-scheme: dark) {
+                .search-button-field.search-button__button:hover {
+                    /* Force specific background and text colors */
+                    background-color: rgba(255, 255, 255, 0.15) !important;
+                }
+                
+                .search-button-field.search-button__button:hover .search-button__custom-text {
+                    color: #ffffff !important;
+                    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.5);
+                }
+                
+                .search-button-field.search-button__button:hover .search-button__kbd {
+                    background-color: #50565d !important;
+                    border-color: #8a9199 !important;
+                    color: #ffffff !important;
+                    box-shadow: 0 1px 0 rgba(140, 148, 157, 0.3) !important;
+                }
+            }
+        `;
         
-        // Only add spacing styles
-        addSpacingStyles();
+        if (!document.getElementById('search-button-force-dark-colors')) {
+            document.head.appendChild(forceStyle);
+        }
+    }
+    
+    function init() {
+        console.log('Initializing dark mode hover fix...');
+        
+        // Add the main dark mode fix
+        addDarkModeFix();
+        
+        // Add more aggressive color forcing if needed
+        addForceDarkModeColors();
         
         initializeSearchButton();
         
@@ -182,5 +246,35 @@
     } else {
         setTimeout(init, 100);
     }
+    
+    // Debug function to check current colors
+    window.checkButtonColors = function() {
+        const btn = document.querySelector('.search-button-field');
+        if (!btn) {
+            console.log('Button not found');
+            return;
+        }
+        
+        const computedStyle = window.getComputedStyle(btn);
+        const textColor = computedStyle.color;
+        const bgColor = computedStyle.backgroundColor;
+        
+        console.group('Button Color Analysis');
+        console.log('Text color:', textColor);
+        console.log('Background color:', bgColor);
+        console.log('Is dark mode?', window.matchMedia('(prefers-color-scheme: dark)').matches);
+        
+        // Calculate contrast ratio (simplified)
+        function hexToRgb(hex) {
+            const result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);
+            return result ? {
+                r: parseInt(result[1], 16),
+                g: parseInt(result[2], 16),
+                b: parseInt(result[3], 16)
+            } : null;
+        }
+        
+        console.groupEnd();
+    };
     
 })();
