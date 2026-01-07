@@ -1,15 +1,15 @@
-// search-button-enhanced.js
-// Enhanced version with kbd styling for the slash key
+// search-button-spacing.js
+// Enhanced version with proper spacing between icon and text
 
 (function() {
     'use strict';
     
-    console.log('Enhanced search button solution loading...');
+    console.log('Search button with improved spacing loading...');
     
     let isInitialized = false;
     let clickHandler = null;
     
-    // Main function that handles both styling and click behavior
+    // Main function
     function initializeSearchButton() {
         if (isInitialized) return;
         
@@ -23,8 +23,8 @@
         
         console.log('Found search button, initializing...');
         
-        // Part 1: Customize button appearance (if not already done)
-        if (!searchButton.getAttribute('data-enhanced')) {
+        // Part 1: Customize button appearance
+        if (!searchButton.getAttribute('data-spacing-fixed')) {
             customizeAppearance(searchButton);
         }
         
@@ -32,12 +32,12 @@
         ensureClickBehavior(searchButton);
         
         isInitialized = true;
-        console.log('✅ Search button fully initialized with enhanced styling');
+        console.log('✅ Search button fully initialized with improved spacing');
     }
     
-    // Customize button text from "Search Ctrl+K" to "Type / to search"
+    // Customize button appearance
     function customizeAppearance(button) {
-        console.log('Customizing button appearance with kbd element...');
+        console.log('Customizing button with improved spacing...');
         
         // Hide original text elements
         const defaultText = button.querySelector('.search-button__default-text');
@@ -77,14 +77,14 @@
             button.setAttribute('title', 'Type / to search');
         }
         
-        // Update aria-label for better accessibility
+        // Update aria-label
         try {
             button.setAttribute('aria-label', 'Type slash to search');
         } catch (e) {
             // Ignore if we can't set it
         }
         
-        button.setAttribute('data-enhanced', 'true');
+        button.setAttribute('data-spacing-fixed', 'true');
     }
     
     // Ensure button click triggers SSS search
@@ -117,7 +117,7 @@
         console.log('Triggering SSS search...');
         
         try {
-            // Method 1: Simulate pressing / key
+            // Simulate pressing / key
             const event = new KeyboardEvent('keydown', {
                 key: '/',
                 keyCode: 191,
@@ -143,97 +143,52 @@
         }
     }
     
-    // Add enhanced CSS styles with kbd styling
-    function addEnhancedStyles() {
+    // Add CSS styles with improved spacing
+    function addImprovedSpacingStyles() {
         const style = document.createElement('style');
-        style.id = 'search-button-enhanced-styles';
+        style.id = 'search-button-spacing-styles';
         style.textContent = `
-            /* Base button styling */
+            /* Base button styling with improved spacing */
             .search-button-field {
-                min-width: 180px !important;
+                min-width: 190px !important; /* Slightly wider to accommodate more spacing */
                 justify-content: flex-start !important;
                 padding-left: 12px !important;
                 padding-right: 12px !important;
+            }
+            
+            /* Increased spacing between search icon and text */
+            /* Target the search icon (FontAwesome icon) */
+            .search-button-field .svg-inline--fa,
+            .search-button-field .fa-magnifying-glass,
+            .search-button-field i[class*="fa-"] {
+                margin-right: 14px !important; /* Increased from default 8px to 14px */
+            }
+            
+            /* Alternative selectors for different icon implementations */
+            .search-button-field svg:first-child,
+            .search-button-field [class*="icon"]:first-child {
+                margin-right: 14px !important;
             }
             
             /* Hover effect */
             .search-button-field:hover {
                 cursor: pointer;
                 transform: translateY(-1px);
-                transition: transform 0.2s;
+                transition: transform 0.2s, box-shadow 0.2s;
+                box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
             }
             
-            /* Custom text container */
+            /* Custom text container - use flex for better alignment */
             .search-button__custom-text {
                 font-size: 0.9em !important;
                 font-weight: 500 !important;
-                display: flex;
-                align-items: center;
-                gap: 4px;
-            }
-            
-            /* Kbd element styling - similar to the example */
-            .search-button__kbd {
                 display: inline-flex;
                 align-items: center;
-                justify-content: center;
-                min-width: 20px;
-                height: 20px;
-                padding: 0 4px;
-                font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
-                font-size: 12px;
-                font-weight: 600;
-                line-height: 1;
-                color: #1f2328;
-                background-color: #f6f8fa;
-                border: 1px solid #d0d7de;
-                border-radius: 4px;
-                box-shadow: 0 1px 0 rgba(31, 35, 40, 0.04);
-                margin: 0 2px;
+                gap: 4px;
+                white-space: nowrap;
             }
             
-            /* Dark mode support */
-            @media (prefers-color-scheme: dark) {
-                .search-button__kbd {
-                    color: #e6edf3;
-                    background-color: #30363d;
-                    border-color: #6e7681;
-                    box-shadow: 0 1px 0 rgba(110, 118, 129, 0.2);
-                }
-            }
-            
-            /* More compact kbd for small screens */
-            @media (max-width: 768px) {
-                .search-button__kbd {
-                    min-width: 18px;
-                    height: 18px;
-                    font-size: 11px;
-                }
-                
-                .search-button__custom-text {
-                    font-size: 0.85em !important;
-                }
-            }
-            
-            /* Animation for the kbd on hover */
-            .search-button-field:hover .search-button__kbd {
-                transform: translateY(-1px);
-                box-shadow: 0 2px 0 rgba(31, 35, 40, 0.08);
-                transition: all 0.1s ease;
-            }
-        `;
-        
-        if (!document.getElementById('search-button-enhanced-styles')) {
-            document.head.appendChild(style);
-        }
-    }
-    
-    // Alternative: More prominent kbd styling
-    function addAlternativeStyles() {
-        const style = document.createElement('style');
-        style.id = 'search-button-alternative-styles';
-        style.textContent = `
-            /* Alternative kbd styling - more like GitHub's style */
+            /* Kbd element styling */
             .search-button__kbd {
                 display: inline-flex;
                 align-items: center;
@@ -246,38 +201,109 @@
                 font-weight: 700;
                 line-height: 1;
                 color: #24292f;
-                background: linear-gradient(180deg, #f6f8fa 0%, #ebedf0 100%);
-                border: 1px solid #d1d9e0;
-                border-bottom-color: #c0c8d1;
+                background-color: #f6f8fa;
+                border: 1px solid #d0d7de;
                 border-radius: 6px;
-                box-shadow: inset 0 -1px 0 #c0c8d1, 0 1px 1px rgba(31, 35, 40, 0.04);
-                margin: 0 3px;
+                box-shadow: 0 1px 0 rgba(31, 35, 40, 0.04);
+                margin: 0 4px;
             }
             
-            /* Dark mode for alternative style */
+            /* Additional spacing adjustments for better visual balance */
+            .search-button__custom-text {
+                letter-spacing: 0.01em; /* Slight letter spacing for better readability */
+            }
+            
+            /* Dark mode support */
             @media (prefers-color-scheme: dark) {
                 .search-button__kbd {
-                    color: #f0f6fc;
-                    background: linear-gradient(180deg, #30363d 0%, #262b32 100%);
-                    border: 1px solid #6e7681;
-                    border-bottom-color: #484f58;
-                    box-shadow: inset 0 -1px 0 #484f58, 0 1px 1px rgba(110, 118, 129, 0.2);
+                    color: #e6edf3;
+                    background-color: #30363d;
+                    border-color: #6e7681;
+                    box-shadow: 0 1px 0 rgba(110, 118, 129, 0.2);
                 }
+            }
+            
+            /* Responsive adjustments */
+            @media (max-width: 992px) {
+                .search-button-field {
+                    min-width: 180px !important;
+                }
+                
+                .search-button-field .svg-inline--fa,
+                .search-button-field .fa-magnifying-glass,
+                .search-button-field i[class*="fa-"] {
+                    margin-right: 12px !important; /* Slightly less spacing on medium screens */
+                }
+            }
+            
+            @media (max-width: 768px) {
+                .search-button-field {
+                    min-width: 170px !important;
+                    padding-left: 10px !important;
+                    padding-right: 10px !important;
+                }
+                
+                .search-button-field .svg-inline--fa,
+                .search-button-field .fa-magnifying-glass,
+                .search-button-field i[class*="fa-"] {
+                    margin-right: 10px !important; /* Reduced spacing on small screens */
+                }
+                
+                .search-button__custom-text {
+                    font-size: 0.85em !important;
+                    gap: 3px;
+                }
+                
+                .search-button__kbd {
+                    min-width: 20px;
+                    height: 20px;
+                    font-size: 12px;
+                    padding: 0 5px;
+                }
+            }
+            
+            @media (max-width: 576px) {
+                .search-button-field {
+                    min-width: 150px !important;
+                    padding-left: 8px !important;
+                    padding-right: 8px !important;
+                }
+                
+                .search-button-field .svg-inline--fa,
+                .search-button-field .fa-magnifying-glass,
+                .search-button-field i[class*="fa-"] {
+                    margin-right: 8px !important; /* Minimal spacing on very small screens */
+                }
+                
+                .search-button__custom-text {
+                    font-size: 0.8em !important;
+                }
+            }
+            
+            /* Animation for the kbd on hover */
+            .search-button-field:hover .search-button__kbd {
+                transform: translateY(-1px);
+                box-shadow: 0 2px 0 rgba(31, 35, 40, 0.08);
+                transition: all 0.1s ease;
+            }
+            
+            /* Ensure proper alignment of all button contents */
+            .search-button-field > * {
+                vertical-align: middle;
             }
         `;
         
-        // Uncomment the line below to use the alternative style
-        // document.head.appendChild(style);
+        if (!document.getElementById('search-button-spacing-styles')) {
+            document.head.appendChild(style);
+        }
     }
     
     // Initialize everything
     function init() {
-        console.log('Initializing enhanced search button solution...');
+        console.log('Initializing search button with improved spacing...');
         
         // Add styles
-        addEnhancedStyles();
-        // Uncomment the line below to try the alternative style
-        // addAlternativeStyles();
+        addImprovedSpacingStyles();
         
         // Try to initialize immediately
         initializeSearchButton();
@@ -309,23 +335,37 @@
         setTimeout(init, 100);
     }
     
-    // Debug function
-    window.debugSearchButton = function() {
-        console.group('🔍 Enhanced Search Button Debug Info');
+    // Debug function for testing spacing
+    window.debugSpacing = function() {
+        console.group('🔍 Button Spacing Debug Info');
         
         const button = document.querySelector('.search-button-field.search-button__button');
         console.log('Button exists:', !!button);
         
         if (button) {
-            console.log('Button HTML:', button.outerHTML);
-            console.log('Is enhanced:', button.getAttribute('data-enhanced'));
+            // Get the search icon
+            const icon = button.querySelector('svg, .fa-magnifying-glass, i[class*="fa-"]');
+            console.log('Icon found:', !!icon);
             
-            // Check if kbd element exists
-            const kbdElement = button.querySelector('.search-button__kbd');
-            console.log('KBD element found:', !!kbdElement);
-            if (kbdElement) {
-                console.log('KBD element:', kbdElement.outerHTML);
+            if (icon) {
+                const computedStyle = window.getComputedStyle(icon);
+                console.log('Icon margin-right:', computedStyle.marginRight);
+                console.log('Icon width/height:', icon.clientWidth, 'x', icon.clientHeight);
             }
+            
+            // Get the custom text container
+            const textContainer = button.querySelector('.search-button__custom-text');
+            console.log('Text container found:', !!textContainer);
+            
+            // Calculate spacing
+            if (icon && textContainer) {
+                const iconRect = icon.getBoundingClientRect();
+                const textRect = textContainer.getBoundingClientRect();
+                const spacing = textRect.left - iconRect.right;
+                console.log('Actual spacing between icon and text:', spacing, 'px');
+            }
+            
+            console.log('Button HTML:', button.outerHTML);
         }
         
         console.groupEnd();
