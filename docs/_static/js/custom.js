@@ -1,75 +1,87 @@
-// _static/js/custom.js
-// 此脚本用于将 PyData 主题的搜索框重定向到 Read the Docs 的服务器端搜索 (SSS)
+// _static/js/pydata-sss-integration.js
+// 专用于将 PyData 主题的搜索按钮重定向到 Read the Docs SSS
 
-document.addEventListener('readthedocs-addons-data-ready', function () {
-  // 确保 RTD 的 SSS 功能已加载
-  if (typeof READTHEDOCS_DATA !== 'undefined' && READTHEDOCS_DATA.features.use_sphinx_search) {
-    // 等待 DOM 完全就绪
-    $(document).ready(function () {
-      // 找到 PyData 主题的搜索输入框（选择器可能需要根据主题版本微调）
-      var pydataSearchInput = document.querySelector('input[type="search"][name="q"]');
-      
-      if (pydataSearchInput) {
-        // 1. 阻止原生的表单提交（即阻止客户端搜索）
-        var searchForm = pydataSearchInput.closest('form');
-        if (searchForm) {
-          searchForm.addEventListener('submit', function (event) {
-            event.preventDefault();
-            triggerSSSSearch(pydataSearchInput.value);
-          });
+(function() {
+    'use strict';
+
+    // 等待 RTD 环境就绪
+    document.addEventListener('readthedocs-addons-data-ready', function() {
+        // 检查 SSS 是否应被启用
+        if (typeof READTHEDOCS_DATA !== 'undefined' && READTHEDOCS_DATA.features.use_sphinx_search) {
+
+            // 核心函数：触发 SSS 搜索
+            function triggerRTDSSS() {
+                // 方法1: 如果 RTD 全局对象存在，调用其 API
+                if (typeof window.ReadTheDocsSearch !== 'undefined') {
+                    window.ReadTheDocsSearch.openSearch('');
+                    return;
+                }
+
+                // 方法2: 模拟按下 '/' 键（SSS 的全局快捷键）
+                // 这是最可靠的后备方案
+                const slashKeyEvent = new KeyboardEvent('keydown', {
+                    key: '/',
+                    code: 'Slash',
+                    keyCode: 191,
+                    which: 191,
+                    bubbles: true
+                });
+                document.dispatchEvent(slashKeyEvent);
+            }
+
+            // 找到并重写 PyData 搜索按钮的行为
+            function overridePyDataSearchButton() {
+                // 选择器需要匹配你提供的按钮结构
+                const searchButtons = document.querySelectorAll('button.btn.search-button-field.search-button__button');
+
+                if (searchButtons.length === 0) {
+                    console.warn('[RTD SSS] 未找到 PyData 搜索按钮，重定向失败。');
+                    return;
+                }
+
+                searchButtons.forEach(function(button) {
+                    // 移除所有现有的事件监听器（避免冲突）
+                    const newButton = button.cloneNode(true);
+                    button.parentNode.replaceChild(newButton, button);
+
+                    // 为新按钮添加我们自己的点击处理
+                    newButton.addEventListener('click', function(event) {
+                        event.preventDefault();
+                        event.stopPropagation(); // 阻止事件冒泡
+                        event.stopImmediatePropagation(); // 阻止其他监听器
+
+                        console.log('[RTD SSS] 已拦截 PyData 搜索按钮点击，转向服务器端搜索。');
+                        triggerRTDSSS();
+                        return false;
+                    });
+
+                    // 可选：更新按钮的 tooltip 提示，告知用户现在使用 SSS
+                    if (newButton.getAttribute('data-bs-original-title')) {
+                        newButton.setAttribute('data-bs-original-title', 'Search (Powered by Read the Docs)');
+                    }
+                    if (newButton.getAttribute('title')) {
+                        newButton.setAttribute('title', 'Search (Powered by Read the Docs)');
+                    }
+                });
+            }
+
+            // 同时监听 Ctrl+K / Cmd+K 快捷键，保持体验一致
+            document.addEventListener('keydown', function(event) {
+                if ((event.ctrlKey || event.metaKey) && event.key === 'k') {
+                    event.preventDefault(); // 阻止浏览器默认搜索
+                    triggerRTDSSS();
+                }
+            });
+
+            // 页面加载完成后执行重写
+            if (document.readyState === 'loading') {
+                document.addEventListener('DOMContentLoaded', overridePyDataSearchButton);
+            } else {
+                overridePyDataSearchButton();
+            }
+
+            console.log('[RTD SSS] PyData 主题搜索重定向脚本已加载。');
         }
-        
-        // 2. 监听搜索框的回车键
-        pydataSearchInput.addEventListener('keydown', function (event) {
-          if (event.key === 'Enter') {
-            event.preventDefault();
-            triggerSSSSearch(this.value);
-          }
-        });
-        
-        // 3. 可选：监听搜索按钮的点击事件（如果有的话）
-        var searchButton = document.querySelector('button[type="submit"][aria-label="Search"]');
-        if (searchButton) {
-          searchButton.addEventListener('click', function (event) {
-            event.preventDefault();
-            triggerSSSSearch(pydataSearchInput.value);
-          });
-        }
-        
-        console.log('[RTD SSS] PyData 搜索框已成功重定向至服务器端搜索。');
-      }
     });
-  }
-});
 
-/**
- * 触发 RTD SSS 搜索
- * @param {string} query - 搜索关键词
- */
-function triggerSSSSearch(query) {
-  if (query && query.trim() !== '') {
-    // 调用 RTD SSS 的全局搜索函数
-    if (typeof window.ReadTheDocsSearch !== 'undefined') {
-      window.ReadTheDocsSearch.openSearch(query.trim());
-    } else {
-      // 备用方案：手动打开 SSS 搜索框并填入关键词
-      var sssInput = document.querySelector('#rtd-search-form input[name="q"]');
-      if (sssInput) {
-        sssInput.value = query.trim();
-        sssInput.focus();
-        // 触发输入事件，可能促使实时搜索开始
-        sssInput.dispatchEvent(new Event('input'));
-      } else {
-        // 如果找不到 SSS 输入框，回退到使用快捷键模拟
-        document.dispatchEvent(new KeyboardEvent('keydown', {'key': '/'}));
-        setTimeout(function() {
-          var sssInputAlt = document.querySelector('#rtd-search-form input[name="q"]');
-          if (sssInputAlt) {
-            sssInputAlt.value = query.trim();
-            sssInputAlt.dispatchEvent(new Event('input'));
-          }
-        }, 100);
-      }
-    }
-  }
-}
+})();
