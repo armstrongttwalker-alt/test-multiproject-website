@@ -283,7 +283,7 @@ if html_theme == "pydata_sphinx_theme":
         "footer_start": ["copyright"],
         "footer_end": [],
         "show_sphinx": False,
-        "navbar_end": ["navbar-icon-links"]
+        "navbar_end": ["navbar-icon-links"],
         "search_as_you_type": True,
     }
     
