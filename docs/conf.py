@@ -378,9 +378,3 @@ extlinks = {
 }
 
 suppress_warnings = ["epub.unknown_project_files"]
-
-# Build PDF & ePub & htmlzip
-formats:
-  - epub
-  - pdf
-  - htmlzip
